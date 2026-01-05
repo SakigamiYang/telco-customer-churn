@@ -4,6 +4,7 @@ from loguru import logger
 
 from constants import DATA
 from ingestion.schemas import staging_schema
+from log_utils import log_dataframe
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -49,13 +50,12 @@ def apply_schema(df: pd.DataFrame, schema):
                     "tenure": df.loc[bad_idx, "tenure"],
                     f"raw_{new_name}": raw.loc[bad_idx],
                     f"clean_{new_name}": clean.loc[bad_idx],
-                }).head(10)
+                })
 
-                logger.warning("Float parse produced NaNs. Context sample (first 10):")
-                logger.warning(f"\n{sample.to_string(index=True)}")
+                logger.warning(log_dataframe(sample, "Float parse produced NaNs", 10))
 
-                top_raw = raw.loc[bad_idx].value_counts(dropna=False).head(10)
-                logger.warning(f"Top raw values that failed parsing (top 10):\n{top_raw.to_string()}")
+                top_raw = raw.loc[bad_idx].value_counts(dropna=False)
+                logger.warning(log_dataframe(top_raw, "Top raw values that failed parsing", 10))
 
             df[new_name] = s.astype("float64")
 
@@ -70,7 +70,6 @@ def apply_schema(df: pd.DataFrame, schema):
 
 
 df = pd.read_csv(RAW_FILE)
-print(df[df["customerID"] == "7590-VHVEG"])
 df = apply_schema(df, staging_schema)
-logger.info(df.head(10))
+logger.info(log_dataframe(df, "loaded raw:", 10))
 df.to_parquet(DATA / "staging" / "telco_customers_staging.parquet")

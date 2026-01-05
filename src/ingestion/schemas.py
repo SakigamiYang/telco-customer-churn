@@ -66,7 +66,7 @@ staging_schema = {
     },
     "PaperlessBilling": {
         "name": "paperless_billing",
-        "type": "string"
+        "type": "boolean"
     },
     "PaymentMethod": {
         "name": "payment_method",
