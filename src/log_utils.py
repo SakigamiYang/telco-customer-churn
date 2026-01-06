@@ -8,7 +8,13 @@ __all__ = [
 ]
 
 
-def log_dataframe(data, message="Data", max_rows=None, tablefmt='psql'):
+def log_dataframe(
+        data,
+        message="Data",
+        max_rows=5,
+        tablefmt='psql',
+        level=logger.info,
+) -> None:
     """
     Print DataFrame or Series as a table using loguru
 
@@ -22,6 +28,8 @@ def log_dataframe(data, message="Data", max_rows=None, tablefmt='psql'):
         Maximum number of rows to display
     tablefmt : str
         Table format ('psql', 'grid', 'fancy_grid', 'github', 'pretty')
+    level: Callable
+        logger.info, logger.warning, logger.error, etc.
     """
     # Convert Series to DataFrame if needed
     if isinstance(data, pd.Series):
@@ -36,4 +44,4 @@ def log_dataframe(data, message="Data", max_rows=None, tablefmt='psql'):
         display_data = display_data.head(max_rows)
 
     table_str = tabulate(display_data, headers='keys', tablefmt=tablefmt, showindex=True)
-    logger.info(f"{message} ({shape_info}):\n{table_str}")
+    level(f"{message} ({shape_info}):\n{table_str}")

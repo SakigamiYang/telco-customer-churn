@@ -15,7 +15,7 @@ pd.set_option('display.unicode.east_asian_width', True)
 RAW_FILE = DATA / "raw" / "WA_Fn-UseC_-Telco-Customer-Churn.csv"
 
 
-def apply_schema(df: pd.DataFrame, schema):
+def apply_schema(df: pd.DataFrame, schema) -> pd.DataFrame:
     rename_map = {k: v["name"] for k, v in schema.items()}
     df = df.rename(columns=rename_map)
 
@@ -52,10 +52,10 @@ def apply_schema(df: pd.DataFrame, schema):
                     f"clean_{new_name}": clean.loc[bad_idx],
                 })
 
-                logger.warning(log_dataframe(sample, "Float parse produced NaNs", 10))
+                log_dataframe(sample, "Float parse produced NaNs", level=logger.warning)
 
                 top_raw = raw.loc[bad_idx].value_counts(dropna=False)
-                logger.warning(log_dataframe(top_raw, "Top raw values that failed parsing", 10))
+                log_dataframe(top_raw, "Top raw values that failed parsing", level=logger.warning)
 
             df[new_name] = s.astype("float64")
 
@@ -71,5 +71,5 @@ def apply_schema(df: pd.DataFrame, schema):
 
 df = pd.read_csv(RAW_FILE)
 df = apply_schema(df, staging_schema)
-logger.info(log_dataframe(df, "loaded raw:", 10))
+log_dataframe(df, "loaded raw:", level=logger.warning)
 df.to_parquet(DATA / "staging" / "telco_customers_staging.parquet")
