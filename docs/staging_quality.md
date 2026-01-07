@@ -1,8 +1,8 @@
-# Staging Data Quality Report
+# Staging Data Quality Report (Phase 2)
 
 ## Scope
 This document summarizes the data quality checks and invariants enforced
-in the **staging layer (Phase 2)** for the Telco Customer Churn dataset.
+in the **staging layer** for the Telco Customer Churn dataset.
 
 Input dataset:
 - `data/staging/telco_customers_staging.parquet`

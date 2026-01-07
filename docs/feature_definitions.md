@@ -1,4 +1,4 @@
-# Feature Definitions (Telco Customer Churn)
+# Feature Definitions (Telco Customer Churn) (Stage 3)
 
 This document defines the feature table produced in Phase 3:
 `data/features/telco_customer_features.parquet`.
